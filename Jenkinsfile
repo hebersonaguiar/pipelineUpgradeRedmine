@@ -10,8 +10,6 @@ node('slave') {
 node('slave') {
     stage('Editing Compose Jboss') {
         sh "rm -rf /tmp/tagRedmine"
-        //sh "rm -rf /srv/composesGit"
-        //sh "git clone https://github.com/hebersonaguiar/composes.git /srv/composesGit"
         sh "cp -R /srv/compose/ /srv/composeBKP"
         sh "cat /srv/compose/docker-compose-redmine-postgresql.yml | grep image | awk -F: 'NR==2 {print \$3}' > /tmp/tagRedmine"
         sh "sed -i 's/'\$(cat /tmp/tagRedmine)'/${params.Tag}/g' /srv/compose/docker-compose-redmine-postgresql.yml" 
@@ -26,6 +24,5 @@ node('slave') {
 
         sh "docker-compose -f /srv/compose/docker-compose-redmine-postgresql.yml up --build --no-deps -d Redmine"
         sh "rm -rf /tmp/tagRedmine"
-        //sh "rm -rf /srv/composesGit" 
     }
 }
